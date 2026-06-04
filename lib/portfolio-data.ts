@@ -1,79 +1,60 @@
-import type { ProjectCaseStudy } from "@/lib/types";
-
 export const profile = {
   name: "Dio Febriansyah Lubis",
   role: "Full-Stack Developer",
-  tagline: "Building reliable web applications from interface to infrastructure.",
+  tagline: "Building scalable web, mobile, and AI-powered digital products.",
   summary:
-    "A concise portfolio foundation for presenting experience, selected projects, and technical capabilities."
+    "Motivated Full-Stack Developer with experience building scalable web applications using React.js, Next.js, TypeScript, Golang, PostgreSQL, Firebase, Supabase, and REST APIs. Experienced in applicant tracking systems, AI-powered candidate screening workflows, recruitment management platforms, hospitality platforms, guest list reservations, table booking systems, and customer management processes.",
+  location: "Denpasar, Bali, Indonesia",
+  email: "diolubisss@gmail.com",
+  phone: "+62 859-6401-9661",
+  github: "github.com/DioLubis"
 };
 
-export const projects: ProjectCaseStudy[] = [
+export const education = [
   {
-    title: "Guestlist.id",
-    role: "Full-Stack Developer",
-    stack: ["Next.js", "TypeScript", "Tailwind CSS", "Supabase"],
-    problem: "Event teams need a faster way to manage guest data, invitations, and check-in flow.",
-    solution:
-      "Built a structured guestlist workflow with responsive UI, data management, and form-driven operations.",
-    result:
-      "Prepared a scalable foundation for event guest management, validation, and future reporting features."
+    institution: "Udayana University",
+    program: "Bachelor of Information Technology",
+    period: "2023 - Present"
   },
   {
-    title: "Karierly",
-    role: "Full-Stack Developer",
-    stack: ["Next.js", "React", "TypeScript", "REST API"],
-    problem:
-      "Career-focused users need a clear platform experience for browsing opportunities and managing profile information.",
-    solution:
-      "Designed the application structure around searchable content, profile flows, and reusable interface components.",
-    result:
-      "Created a portfolio-ready case study base for explaining product flow, user journey, and technical decisions."
-  },
-  {
-    title: "RASATA",
-    role: "Full-Stack Developer",
-    stack: ["React", "Node.js", "PostgreSQL", "Cloud Deployment"],
-    problem:
-      "Operational content and service data need to be organized into an accessible, maintainable web experience.",
-    solution:
-      "Implemented a modular full-stack foundation with reusable sections, backend-ready data boundaries, and responsive pages.",
-    result:
-      "Established a cleaner structure for presenting service information and extending the product over time."
-  },
-  {
-    title: "Eaty-Eat",
-    role: "Full-Stack Developer",
-    stack: ["Next.js", "TypeScript", "Tailwind CSS", "API Integration"],
-    problem:
-      "Food discovery and ordering experiences need fast navigation, clear menus, and mobile-friendly interaction.",
-    solution:
-      "Built the UI foundation for browsing food content, organizing menu data, and supporting future transactional flows.",
-    result:
-      "Delivered a responsive case-study base that can be expanded with menu management, checkout, and analytics details."
+    institution: "SMK Negeri 1 Denpasar",
+    program: "Multimedia",
+    period: "2021 - 2023"
   }
 ];
 
 export const skills = [
-  "Frontend Architecture",
-  "Backend API Design",
-  "Database Modeling",
-  "Authentication",
-  "Deployment",
-  "Testing"
+  "Scalable Web Applications",
+  "REST API Development",
+  "PostgreSQL & Supabase",
+  "Mobile App Development",
+  "AI-Powered Workflows",
+  "Recruitment Platforms"
 ];
 
 export const skillGroups = [
   {
     title: "Frontend",
-    items: ["Next.js", "React", "TypeScript", "Tailwind CSS"]
+    items: ["React.js", "Next.js", "TypeScript", "JavaScript", "HTML", "CSS", "Tailwind CSS"]
   },
   {
     title: "Backend",
-    items: ["Node.js", "REST APIs", "Supabase", "PostgreSQL"]
+    items: ["Golang", "PHP", "Laravel", "REST API", "JWT"]
   },
   {
-    title: "Workflow",
-    items: ["Git", "CI/CD", "Testing", "Deployment"]
+    title: "Mobile",
+    items: ["Expo", "React Native", "Kotlin", "Android Studio"]
+  },
+  {
+    title: "Database & Infrastructure",
+    items: ["PostgreSQL", "MySQL", "Supabase", "Firebase", "Redis", "Docker"]
+  },
+  {
+    title: "Tools",
+    items: ["Git", "GitHub", "GitLab", "Postman", "Figma"]
+  },
+  {
+    title: "Soft Skills",
+    items: ["Problem Solving", "Teamwork", "Adaptability", "Responsibility", "Attention to Detail"]
   }
 ];

@@ -20,6 +20,20 @@ const inter = Inter({
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://portfolio-dio.vercel.app";
+const description =
+  "Portfolio of Dio Febriansyah Lubis, a Full-Stack Developer experienced in building scalable web, mobile, and AI-powered applications using React, Next.js, TypeScript, Golang, PostgreSQL, Supabase, Firebase, and REST APIs.";
+const keywords = [
+  "Full-Stack Developer",
+  "React Developer",
+  "Next.js Developer",
+  "Golang Developer",
+  "Supabase",
+  "PostgreSQL",
+  "AI Screening",
+  "ATS",
+  "Web Developer Bali",
+  "Mobile Developer"
+];
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -27,20 +41,11 @@ export const metadata: Metadata = {
     default: "Dio Febriansyah Lubis | Full-Stack Developer",
     template: "%s | Dio Febriansyah Lubis"
   },
-  description:
-    "Portfolio Dio Febriansyah Lubis, Full-Stack Developer focused on responsive web apps, backend APIs, and Supabase/PostgreSQL integrations.",
+  description,
   applicationName: "Dio Febriansyah Lubis Portfolio",
   authors: [{ name: "Dio Febriansyah Lubis" }],
   creator: "Dio Febriansyah Lubis",
-  keywords: [
-    "Dio Febriansyah Lubis",
-    "Full-Stack Developer",
-    "Next.js Developer",
-    "TypeScript",
-    "Supabase",
-    "PostgreSQL",
-    "Portfolio"
-  ],
+  keywords,
   alternates: {
     canonical: "/"
   },
@@ -50,14 +55,12 @@ export const metadata: Metadata = {
     url: "/",
     siteName: "Dio Febriansyah Lubis Portfolio",
     title: "Dio Febriansyah Lubis | Full-Stack Developer",
-    description:
-      "Responsive personal portfolio for a Full-Stack Developer, including projects, skills, and contact form integration."
+    description
   },
   twitter: {
     card: "summary_large_image",
     title: "Dio Febriansyah Lubis | Full-Stack Developer",
-    description:
-      "Responsive personal portfolio for a Full-Stack Developer, including projects, skills, and contact form integration."
+    description
   },
   robots: {
     index: true,
@@ -115,7 +118,25 @@ export default function RootLayout({
                 name: "Dio Febriansyah Lubis",
                 jobTitle: "Full-Stack Developer",
                 url: siteUrl,
-                knowsAbout: ["Next.js", "TypeScript", "Supabase", "PostgreSQL", "React"]
+                address: {
+                  "@type": "PostalAddress",
+                  addressLocality: "Denpasar",
+                  addressRegion: "Bali",
+                  addressCountry: "Indonesia"
+                },
+                email: "diolubisss@gmail.com",
+                telephone: "+62 859-6401-9661",
+                sameAs: ["https://github.com/DioLubis"],
+                knowsAbout: [
+                  "React.js",
+                  "Next.js",
+                  "TypeScript",
+                  "Golang",
+                  "PostgreSQL",
+                  "Supabase",
+                  "Firebase",
+                  "React Native"
+                ]
               })
             }}
           />

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { ArrowUpRight, ChevronDown, ChevronUp } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { Badge } from "@/components/ui/badge";
@@ -13,12 +14,13 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
-import { projects } from "@/lib/portfolio-data";
+import { projects } from "@/src/data/projects";
 import type { ProjectCaseStudy } from "@/lib/types";
 
 export function ProjectsGrid() {
   const [projectItems, setProjectItems] = useState<ProjectCaseStudy[]>(projects);
   const [expandedProject, setExpandedProject] = useState<string | null>(null);
+  const [isLoadingLiveProjects, setIsLoadingLiveProjects] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
@@ -27,6 +29,7 @@ export function ProjectsGrid() {
       const response = await fetch("/api/projects");
 
       if (!response.ok) {
+        setIsLoadingLiveProjects(false);
         return;
       }
 
@@ -37,9 +40,19 @@ export function ProjectsGrid() {
       if (isMounted && payload.projects?.length) {
         setProjectItems(payload.projects);
       }
+
+      if (isMounted) {
+        setIsLoadingLiveProjects(false);
+      }
     }
 
-    loadProjects().catch(() => undefined);
+    loadProjects()
+      .catch(() => undefined)
+      .finally(() => {
+        if (isMounted) {
+          setIsLoadingLiveProjects(false);
+        }
+      });
 
     return () => {
       isMounted = false;
@@ -54,15 +67,19 @@ export function ProjectsGrid() {
           Selected Work
         </h1>
         <p className="max-w-2xl text-muted-foreground">
-          Four main portfolio projects with expandable case study details.
+          Four main projects across hospitality, recruitment, Android development, and food ordering systems.
+        </p>
+        <p aria-live="polite" className="text-sm text-muted-foreground">
+          {isLoadingLiveProjects ? "Checking live project data..." : "Project data loaded."}
         </p>
       </div>
 
       <div className="grid gap-5 md:grid-cols-2">
         {projectItems.map((project, index) => (
           <motion.article
-            key={project.title}
-            initial={{ opacity: 0, y: 18 }}
+            id={project.slug}
+            key={project.slug}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, delay: index * 0.08 }}
             whileHover={{ y: -6 }}
@@ -73,12 +90,11 @@ export function ProjectsGrid() {
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                     <ArrowUpRight className="h-5 w-5" />
                   </div>
-                  <Badge>{project.role}</Badge>
+                  <Badge>{project.year}</Badge>
                 </div>
                 <CardTitle>{project.title}</CardTitle>
-                <CardDescription>
-                  {project.problem}
-                </CardDescription>
+                <p className="text-sm font-semibold text-primary">{project.role}</p>
+                <CardDescription>{project.description}</CardDescription>
               </CardHeader>
               <CardContent className="flex flex-wrap gap-2">
                 {project.stack.map((item) => (
@@ -88,7 +104,7 @@ export function ProjectsGrid() {
               <AnimatePresence initial={false}>
                 {expandedProject === project.title ? (
                   <motion.div
-                    id={`case-study-${project.title}`}
+                    id={`case-study-${project.slug}`}
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
@@ -98,14 +114,38 @@ export function ProjectsGrid() {
                     <CardContent className="grid gap-4 border-t pt-5">
                       <CaseStudyItem label="Problem" value={project.problem} />
                       <CaseStudyItem label="Solution" value={project.solution} />
+                      <CaseStudyList label="Key Features" values={project.keyFeatures} />
+                      <CaseStudyList
+                        label="Technical Contribution"
+                        values={project.technicalContribution}
+                      />
                       <CaseStudyItem label="Result" value={project.result} />
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        <Button asChild size="sm">
+                          <Link href={project.caseStudyUrl}>View case study</Link>
+                        </Button>
+                        {project.githubUrl ? (
+                          <Button asChild size="sm" variant="outline">
+                            <a href={project.githubUrl} rel="noreferrer" target="_blank">
+                              GitHub
+                            </a>
+                          </Button>
+                        ) : null}
+                        {project.demoUrl ? (
+                          <Button asChild size="sm" variant="outline">
+                            <a href={project.demoUrl} rel="noreferrer" target="_blank">
+                              Live demo
+                            </a>
+                          </Button>
+                        ) : null}
+                      </div>
                     </CardContent>
                   </motion.div>
                 ) : null}
               </AnimatePresence>
-              <CardFooter>
+              <CardFooter className="gap-2">
                 <Button
-                  aria-controls={`case-study-${project.title}`}
+                  aria-controls={`case-study-${project.slug}`}
                   aria-expanded={expandedProject === project.title}
                   className="w-full justify-between"
                   onClick={() =>
@@ -137,6 +177,19 @@ function CaseStudyItem({ label, value }: { label: string; value: string }) {
     <div className="grid gap-1">
       <h3 className="text-sm font-bold text-foreground">{label}</h3>
       <p className="text-sm leading-6 text-muted-foreground">{value}</p>
+    </div>
+  );
+}
+
+function CaseStudyList({ label, values }: { label: string; values: string[] }) {
+  return (
+    <div className="grid gap-2">
+      <h3 className="text-sm font-bold text-foreground">{label}</h3>
+      <ul className="grid gap-1 text-sm leading-6 text-muted-foreground">
+        {values.map((value) => (
+          <li key={value}>- {value}</li>
+        ))}
+      </ul>
     </div>
   );
 }

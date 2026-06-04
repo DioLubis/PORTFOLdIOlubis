@@ -6,7 +6,10 @@ type ContactPayload = {
   name?: unknown;
   email?: unknown;
   message?: unknown;
+  website?: unknown;
 };
+
+const contactSubmissions = new Map<string, number>();
 
 function isText(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
@@ -26,10 +29,35 @@ export async function POST(request: Request) {
   const name = payload.name.trim();
   const email = payload.email.trim();
   const message = payload.message.trim();
+  const website = typeof payload.website === "string" ? payload.website.trim() : "";
+
+  if (website) {
+    return NextResponse.json({ ok: true });
+  }
 
   if (!isEmail(email)) {
     return NextResponse.json({ error: "A valid email is required." }, { status: 400 });
   }
+
+  if (name.length > 120 || email.length > 160 || message.length > 2000) {
+    return NextResponse.json({ error: "Message content is too long." }, { status: 400 });
+  }
+
+  const clientIp =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    request.headers.get("x-real-ip") ??
+    "anonymous";
+  const lastSubmission = contactSubmissions.get(clientIp) ?? 0;
+  const now = Date.now();
+
+  if (now - lastSubmission < 10000) {
+    return NextResponse.json(
+      { error: "Please wait a moment before sending another message." },
+      { status: 429 }
+    );
+  }
+
+  contactSubmissions.set(clientIp, now);
 
   const { supabaseUrl, supabaseKey, error: configError } = getSupabaseApiConfig();
 
@@ -62,8 +90,17 @@ export async function POST(request: Request) {
 
   if (!response.ok) {
     const payload = await response.json().catch(() => null);
+    const isSchemaMissing =
+      response.status === 404 &&
+      typeof payload?.message === "string" &&
+      payload.message.includes("contact_messages");
+
     return NextResponse.json(
-      { error: payload?.message ?? "Contact message could not be stored." },
+      {
+        error: isSchemaMissing
+          ? "Contact storage is not ready yet. Please email directly for now."
+          : "Contact message could not be stored."
+      },
       { status: response.status }
     );
   }

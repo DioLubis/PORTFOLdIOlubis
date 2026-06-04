@@ -11,11 +11,11 @@ export function SkillsOverview() {
           Technical Stack
         </h1>
         <p className="max-w-2xl text-muted-foreground">
-          Grouped placeholders for core technologies and development workflow.
+          Technologies and working habits used to build web, mobile, backend, and database-driven products.
         </p>
       </div>
 
-      <div className="grid gap-5 md:grid-cols-3">
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         {skillGroups.map((group) => (
           <Card key={group.title}>
             <CardHeader>

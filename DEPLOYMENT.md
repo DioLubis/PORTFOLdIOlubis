@@ -19,9 +19,9 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-publishable-key
 Optional server-side variables:
 
 ```bash
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+SUPABASE_SERVICE_ROLE_KEY=replace-with-service-role-key
 POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres
+POSTGRES_PASSWORD=your-database-password
 ```
 
 ## Build Settings
