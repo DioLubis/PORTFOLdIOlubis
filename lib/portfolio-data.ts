@@ -8,19 +8,47 @@ export const profile = {
 
 export const projects = [
   {
-    title: "Project One",
-    description: "Interactive project card placeholder for a future full-stack case study.",
-    stack: ["Next.js", "TypeScript", "API"]
+    title: "Guestlist.id",
+    role: "Full-Stack Developer",
+    stack: ["Next.js", "TypeScript", "Tailwind CSS", "Supabase"],
+    problem: "Event teams need a faster way to manage guest data, invitations, and check-in flow.",
+    solution:
+      "Built a structured guestlist workflow with responsive UI, data management, and form-driven operations.",
+    result:
+      "Prepared a scalable foundation for event guest management, validation, and future reporting features."
   },
   {
-    title: "Project Two",
-    description: "Space for a production app, client dashboard, or backend service.",
-    stack: ["React", "Node.js", "Database"]
+    title: "Karierly",
+    role: "Full-Stack Developer",
+    stack: ["Next.js", "React", "TypeScript", "REST API"],
+    problem:
+      "Career-focused users need a clear platform experience for browsing opportunities and managing profile information.",
+    solution:
+      "Designed the application structure around searchable content, profile flows, and reusable interface components.",
+    result:
+      "Created a portfolio-ready case study base for explaining product flow, user journey, and technical decisions."
   },
   {
-    title: "Project Three",
-    description: "Placeholder for deployment notes, performance wins, and repository links.",
-    stack: ["Tailwind", "Supabase", "Cloud"]
+    title: "RASATA",
+    role: "Full-Stack Developer",
+    stack: ["React", "Node.js", "PostgreSQL", "Cloud Deployment"],
+    problem:
+      "Operational content and service data need to be organized into an accessible, maintainable web experience.",
+    solution:
+      "Implemented a modular full-stack foundation with reusable sections, backend-ready data boundaries, and responsive pages.",
+    result:
+      "Established a cleaner structure for presenting service information and extending the product over time."
+  },
+  {
+    title: "Eaty-Eat",
+    role: "Full-Stack Developer",
+    stack: ["Next.js", "TypeScript", "Tailwind CSS", "API Integration"],
+    problem:
+      "Food discovery and ordering experiences need fast navigation, clear menus, and mobile-friendly interaction.",
+    solution:
+      "Built the UI foundation for browsing food content, organizing menu data, and supporting future transactional flows.",
+    result:
+      "Delivered a responsive case-study base that can be expanded with menu management, checkout, and analytics details."
   }
 ];
 
