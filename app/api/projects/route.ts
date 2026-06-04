@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { projects as fallbackProjects } from "@/lib/portfolio-data";
-import { createSupabaseApiClient } from "@/lib/supabase/api-client";
+import { getSupabaseApiConfig } from "@/lib/supabase/api-client";
+import { withTimeout } from "@/lib/timeout";
 import type { ProjectCaseStudy } from "@/lib/types";
 
 type ProjectRow = {
@@ -24,9 +25,9 @@ function toProject(row: ProjectRow): ProjectCaseStudy {
 }
 
 export async function GET() {
-  const { client } = createSupabaseApiClient();
+  const { supabaseUrl, supabaseKey } = getSupabaseApiConfig();
 
-  if (!client) {
+  if (!supabaseUrl || !supabaseKey) {
     return NextResponse.json({
       projects: fallbackProjects,
       source: "fallback",
@@ -34,17 +35,43 @@ export async function GET() {
     });
   }
 
-  const { data, error } = await client
-    .from("projects")
-    .select("title, role, stack, problem, solution, result")
-    .eq("is_published", true)
-    .order("sort_order", { ascending: true });
+  const query =
+    "select=title,role,stack,problem,solution,result&is_published=eq.true&order=sort_order.asc";
+  const response = await withTimeout(
+    fetch(`${supabaseUrl}/rest/v1/projects?${query}`, {
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`
+      },
+      signal: AbortSignal.timeout(3000)
+    }),
+    3000
+  ).catch((error: Error) => error);
 
-  if (error || !data?.length) {
+  if (response instanceof Error) {
     return NextResponse.json({
       projects: fallbackProjects,
       source: "fallback",
-      message: error?.message ?? "No live projects found."
+      message: response.message
+    });
+  }
+
+  if (!response.ok) {
+    const payload = await response.json().catch(() => null);
+    return NextResponse.json({
+      projects: fallbackProjects,
+      source: "fallback",
+      message: payload?.message ?? "Live projects could not be loaded."
+    });
+  }
+
+  const data = (await response.json()) as ProjectRow[];
+
+  if (!data.length) {
+    return NextResponse.json({
+      projects: fallbackProjects,
+      source: "fallback",
+      message: "No live projects found."
     });
   }
 

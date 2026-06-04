@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { createSupabaseApiClient } from "@/lib/supabase/api-client";
+import { getSupabaseApiConfig } from "@/lib/supabase/api-client";
+import { withTimeout } from "@/lib/timeout";
 
 type ContactPayload = {
   name?: unknown;
@@ -30,20 +31,41 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "A valid email is required." }, { status: 400 });
   }
 
-  const { client, error: configError } = createSupabaseApiClient();
+  const { supabaseUrl, supabaseKey, error: configError } = getSupabaseApiConfig();
 
-  if (!client) {
+  if (!supabaseUrl || !supabaseKey) {
     return NextResponse.json({ error: configError }, { status: 500 });
   }
 
-  const { error } = await client.from("contact_messages").insert({
-    name,
-    email,
-    message
-  });
+  const response = await withTimeout(
+    fetch(`${supabaseUrl}/rest/v1/contact_messages`, {
+      method: "POST",
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal"
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        message
+      }),
+      signal: AbortSignal.timeout(3000)
+    }),
+    3000
+  ).catch((error: Error) => error);
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  if (response instanceof Error) {
+    return NextResponse.json({ error: response.message }, { status: 500 });
+  }
+
+  if (!response.ok) {
+    const payload = await response.json().catch(() => null);
+    return NextResponse.json(
+      { error: payload?.message ?? "Contact message could not be stored." },
+      { status: response.status }
+    );
   }
 
   return NextResponse.json({ ok: true });
