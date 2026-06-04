@@ -12,7 +12,7 @@ const navigation = [
 
 export const metadata: Metadata = {
   title: "Dio Febriansyah Lubis | Full-Stack Developer",
-  description: "Personal portfolio skeleton for Dio Febriansyah Lubis."
+  description: "Personal portfolio for Dio Febriansyah Lubis, Full-Stack Developer."
 };
 
 export default function RootLayout({
@@ -23,22 +23,32 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <header className="site-header">
-          <Link className="brand" href="/" aria-label="Dio Febriansyah Lubis home">
+        <header className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-6 sm:flex-row sm:items-center sm:justify-between">
+          <Link
+            className="text-base font-bold text-foreground"
+            href="/"
+            aria-label="Dio Febriansyah Lubis home"
+          >
             Dio Febriansyah Lubis
           </Link>
-          <nav className="site-nav" aria-label="Main navigation">
+          <nav className="flex flex-wrap gap-2" aria-label="Main navigation">
             {navigation.map((item) => (
-              <Link key={item.href} href={item.href}>
+              <Link
+                className="rounded-md px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                key={item.href}
+                href={item.href}
+              >
                 {item.label}
               </Link>
             ))}
           </nav>
         </header>
 
-        <main className="site-main">{children}</main>
+        <main className="mx-auto min-h-[calc(100vh-168px)] w-full max-w-6xl px-4 py-8">
+          {children}
+        </main>
 
-        <footer className="site-footer">
+        <footer className="mx-auto w-full max-w-6xl border-t px-4 py-6 text-sm text-muted-foreground">
           <p>Full-Stack Developer Portfolio</p>
         </footer>
       </body>
