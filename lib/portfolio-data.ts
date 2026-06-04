@@ -7,7 +7,8 @@ export const profile = {
   location: "Denpasar, Bali, Indonesia",
   email: "diolubisss@gmail.com",
   phone: "+62 859-6401-9661",
-  github: "github.com/DioLubis"
+  github: "github.com/DioLubis",
+  linkedin: "LinkedIn.com/In/diolubisss"
 };
 
 export const education = [

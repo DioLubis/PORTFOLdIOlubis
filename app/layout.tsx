@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import Link from "next/link";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -12,12 +11,6 @@ const navigation = [
   { href: "/skills", label: "Skills" },
   { href: "/contact", label: "Contact" }
 ];
-
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter"
-});
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://portfolio-dio.vercel.app";
 const description =
@@ -75,8 +68,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.variable}>
+      <body>
         <ThemeProvider>
+          <div aria-hidden="true" className="ambient-background">
+            <span className="ambient-shape ambient-shape-one" />
+            <span className="ambient-shape ambient-shape-two" />
+            <span className="ambient-grid" />
+          </div>
           <header className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-6 sm:flex-row sm:items-center sm:justify-between">
             <Link
               className="text-base font-bold text-foreground"
@@ -126,7 +124,7 @@ export default function RootLayout({
                 },
                 email: "diolubisss@gmail.com",
                 telephone: "+62 859-6401-9661",
-                sameAs: ["https://github.com/DioLubis"],
+                sameAs: ["https://github.com/DioLubis", "https://LinkedIn.com/In/diolubisss"],
                 knowsAbout: [
                   "React.js",
                   "Next.js",

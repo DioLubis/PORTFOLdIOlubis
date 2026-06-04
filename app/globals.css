@@ -67,11 +67,11 @@ html {
 }
 
 body {
+  position: relative;
   min-height: 100vh;
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 ::selection {
@@ -82,4 +82,83 @@ body {
 :focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 3px;
+}
+
+.ambient-background {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--primary) 10%, transparent), transparent 28rem),
+    radial-gradient(circle at 80% 10%, color-mix(in srgb, #6aa6ff 8%, transparent), transparent 26rem),
+    linear-gradient(180deg, color-mix(in srgb, var(--background) 92%, white), var(--background));
+}
+
+.ambient-shape {
+  position: absolute;
+  width: 28rem;
+  height: 28rem;
+  border-radius: 999px;
+  filter: blur(58px);
+  opacity: 0.22;
+  transform: translate3d(0, 0, 0);
+}
+
+.ambient-shape-one {
+  left: -8rem;
+  top: 16rem;
+  background: var(--primary);
+  animation: ambient-float-one 18s ease-in-out infinite;
+}
+
+.ambient-shape-two {
+  right: -10rem;
+  top: 4rem;
+  background: #6aa6ff;
+  animation: ambient-float-two 22s ease-in-out infinite;
+}
+
+.ambient-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--border) 35%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--border) 35%, transparent) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(to bottom, black, transparent 70%);
+  opacity: 0.22;
+}
+
+@keyframes ambient-float-one {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(6rem, -3rem, 0) scale(1.08);
+  }
+}
+
+@keyframes ambient-float-two {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(-5rem, 4rem, 0) scale(0.95);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .ambient-shape {
+    animation: none;
+  }
 }
