@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createSupabaseApiClient } from "@/lib/supabase/api-client";
 
 type ContactPayload = {
   name?: unknown;
@@ -11,6 +11,10 @@ function isText(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
 }
 
+function isEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
 export async function POST(request: Request) {
   const payload = (await request.json().catch(() => null)) as ContactPayload | null;
 
@@ -18,24 +22,24 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Name, email, and message are required." }, { status: 400 });
   }
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL;
-  const supabaseKey =
-    process.env.SUPABASE_SERVICE_ROLE_KEY ??
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const name = payload.name.trim();
+  const email = payload.email.trim();
+  const message = payload.message.trim();
 
-  if (!supabaseUrl || !supabaseKey) {
-    return NextResponse.json(
-      { error: "Supabase environment variables are not configured." },
-      { status: 500 }
-    );
+  if (!isEmail(email)) {
+    return NextResponse.json({ error: "A valid email is required." }, { status: 400 });
   }
 
-  const supabase = createClient(supabaseUrl, supabaseKey);
-  const { error } = await supabase.from("contact_messages").insert({
-    name: payload.name.trim(),
-    email: payload.email.trim(),
-    message: payload.message.trim()
+  const { client, error: configError } = createSupabaseApiClient();
+
+  if (!client) {
+    return NextResponse.json({ error: configError }, { status: 500 });
+  }
+
+  const { error } = await client.from("contact_messages").insert({
+    name,
+    email,
+    message
   });
 
   if (error) {

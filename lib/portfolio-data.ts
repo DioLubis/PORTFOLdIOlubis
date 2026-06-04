@@ -1,3 +1,5 @@
+import type { ProjectCaseStudy } from "@/lib/types";
+
 export const profile = {
   name: "Dio Febriansyah Lubis",
   role: "Full-Stack Developer",
@@ -6,7 +8,7 @@ export const profile = {
     "A concise portfolio foundation for presenting experience, selected projects, and technical capabilities."
 };
 
-export const projects = [
+export const projects: ProjectCaseStudy[] = [
   {
     title: "Guestlist.id",
     role: "Full-Stack Developer",

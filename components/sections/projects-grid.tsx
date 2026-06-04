@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowUpRight, ChevronDown, ChevronUp } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { Badge } from "@/components/ui/badge";
@@ -14,9 +14,37 @@ import {
   CardTitle
 } from "@/components/ui/card";
 import { projects } from "@/lib/portfolio-data";
+import type { ProjectCaseStudy } from "@/lib/types";
 
 export function ProjectsGrid() {
+  const [projectItems, setProjectItems] = useState<ProjectCaseStudy[]>(projects);
   const [expandedProject, setExpandedProject] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadProjects() {
+      const response = await fetch("/api/projects");
+
+      if (!response.ok) {
+        return;
+      }
+
+      const payload = (await response.json()) as {
+        projects?: ProjectCaseStudy[];
+      };
+
+      if (isMounted && payload.projects?.length) {
+        setProjectItems(payload.projects);
+      }
+    }
+
+    loadProjects().catch(() => undefined);
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <section className="space-y-8">
@@ -31,7 +59,7 @@ export function ProjectsGrid() {
       </div>
 
       <div className="grid gap-5 md:grid-cols-2">
-        {projects.map((project, index) => (
+        {projectItems.map((project, index) => (
           <motion.article
             key={project.title}
             initial={{ opacity: 0, y: 18 }}
